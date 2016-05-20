@@ -96,6 +96,11 @@ textarea {
     background-color: orange;
 }
 
+.par.old {
+    color: gray;
+    font-size:small;
+}
+
 
 
 
