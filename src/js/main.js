@@ -1,3 +1,5 @@
+var significantThreshold = 0.2
+
 var docContent = {
     docName: "Test",
 
@@ -57,15 +59,40 @@ function displayDocument() {
         else {
             displayHTML += '<p>' + currPar.text + '</p>';
         }
-        // append details about the current paragraph (authors, changes, etc.) TODO: make collapsible
-        displayHTML += '<p >' + "Edited by:" + getAuthors(currPar.authors) + '</p>';
 
-        displayHTML += '<p >' + "Previous text:" + currPar.previousText + '</p>';
+        // append details about the current paragraph (authors, changes, etc.) TODO: make collapsible
+        if (currPar.edited & !currPar.new) {
+            // var infoButtonID = 'infoButton_' + i;
+            displayHTML +=  '<p><button class="mdl-button mdl-js-button mdl-button--primary info-button" data-index="' + i +   '">' +
+                'More...' +
+                '</button></p>';
+            // var infoDivID = 'info_' + i;
+            // displayHTML += '<div style=' +'display:none'+ ' id=' + infoDivID + '"">'
+            displayHTML += '<div class="parInfo"' + ' data-index="' + i + '">'
+            displayHTML += '<p >' + "Edited by: " + getAuthors(currPar.authors) + '</p>';
+            var prevTextString = "Previous text";
+            if (currPar.extentChange > significantThreshold)
+                prevTextString += ' (significant changes):';
+            else
+                prevTextString += ' (minor changes):';
+
+            displayHTML += '<span >' + prevTextString + '</span>';
+            displayHTML += '<p >' + currPar.previousText + '</p>';
+            displayHTML += '</div>'
+        }
+
+
 
         displayHTML += "</div>";
     }
-    $("#content").html(displayHTML);
 
+
+    $("#content").html(displayHTML);
+    $(".parInfo").css("display", "none");
+    $(".info-button").click(function() {
+        showParDetails($(this).attr("data-index"))
+
+    });
 
     // $(".teammate").mouseenter(function(event) {
     //     $(this).addClass("spotlight");
@@ -80,6 +107,18 @@ function displayDocument() {
     //     incrementPopularity($(this).attr("data-index"))
     //
     // });
+}
+
+function showParDetails(parIndex) {
+    if ($(".info-button[data-index=" + parIndex + "]").text() == "More...") {
+        $(".parInfo[data-index=" + parIndex + "]").css("display", "block");
+        $(".info-button[data-index=" + parIndex + "]").text('Less...');
+    }
+    else {
+        $(".parInfo[data-index=" + parIndex + "]").css("display", "none");
+        $(".info-button[data-index=" + parIndex + "]").text('More...');
+    }
+
 }
 
 function getAuthors(authorList) {
