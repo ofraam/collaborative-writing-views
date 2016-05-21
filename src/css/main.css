@@ -89,16 +89,17 @@ textarea {
    ========================================================================== */
 
  .par.new {
-    background-color: darkseagreen;
+    background-color: #d9ead3;
  }
 
 .par.mod {
-    background-color: orange;
+    background-color: #fce5cd;
 }
 
 .par.old {
     color: gray;
     font-size:small;
+    background-color:transparent;
 }
 
 
